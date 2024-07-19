@@ -1,0 +1,166 @@
+name: pos
+description: A new Flutter project.
+# The following line prevents the package from being accidentally published to
+# pub.dev using `flutter pub publish`. This is preferred for private packages.
+publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+
+# The following defines the version and build number for your application.
+# A version number is three numbers separated by dots, like 1.2.43
+# followed by an optional build number separated by a +.
+# Both the version and the builder number may be overridden in flutter
+# build by specifying --build-name and --build-number, respectively.
+# In Android, build-name is used as versionName while build-number is used as versionCode.
+# Read more about Android versioning at https://developer.android.com/studio/publish/versioning
+# In iOS, build-name is used as CFBundleShortVersionString while build-number is used as CFBundleVersion.
+# Read more about iOS versioning at
+# https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
+# In Windows, build-name is used as the major, minor, and patch parts
+# of the product and file versions while build-number is used as the build suffix.
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.4.3 <4.0.0'
+
+# Dependencies specify other packages that your package needs in order to work.
+# To automatically upgrade your package dependencies to the latest versions
+# consider running `flutter pub upgrade --major-versions`. Alternatively,
+# dependencies can be manually updated by changing the version numbers below to
+# the latest version available on pub.dev. To see which dependencies have newer
+# versions available, run `flutter pub outdated`.
+dependencies:
+  flutter:
+    sdk: flutter
+
+  # The following adds the Cupertino Icons font to your application.
+  # Use with the CupertinoIcons class for iOS style icons.
+  cupertino_icons: ^1.0.6
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+  # The "flutter_lints" package below contains a set of recommended lints to
+  # encourage good coding practices. The lint set provided by the package is
+  # activated in the `analysis_options.yaml` file located at the root of your
+  # package. See that file for information about deactivating specific lint
+  # rules and activating additional ones.
+  flutter_lints: ^3.0.0
+
+# For information on the generic Dart part of this file, see the
+# following page: https://dart.dev/tools/pub/pubspec
+
+# The following section is specific to Flutter packages.
+flutter:
+  # The following line ensures that the Material Icons font is
+  # included with your application, so that you can use the icons in
+  # the material Icons class.
+  uses-material-design: true
+
+  # To add assets to your application, add an assets section, like this:
+  assets:
+    - assets/apple.jpg
+    - assets/banana.jpg
+    - assets/beans.jpg
+    - assets/carrot.jpg
+    - assets/corn.jpg
+    - assets/ketchup.png
+    - assets/mustard.jpg
+    - assets/orange.jpg
+    - assets/strawberry.jpg
+    - assets/tomato.jpg
+    - assets/bokchoi.png
+    - assets/inferior_sibuyas.png
+    - assets/pipino.png
+    - assets/silly.png
+    - assets/repolyo.png
+    - assets/talong.png
+    - assets/tomato.png
+    - assets/bellpeper_green.png
+    - assets/bellpepper_red.png
+    - assets/bellpepper.png
+    - assets/brocoli.png
+    - assets/carrot.png
+    - assets/cauli_flower.png
+    - assets/corn.png
+    - assets/green_onion.png
+    - assets/kalabasa.png
+    - assets/mushroom.png
+    - assets/okra.png
+    - assets/patatas.png
+    - assets/privelgedged_sibuyas.png
+    - assets/datu_puti_soy_sauce_sachet.webp
+    - assets/mang_tomas_1_bottle.png
+    - assets/toyo_silver_swan_1_liter.png
+    - assets/UFC_banana_ketchup_sachet.png
+    - assets/cocomama_fresh_gata.webp
+    - assets/datu_puti_vinegar_sachet.png
+    - assets/datu_puti_vinegar_1L.png
+    - assets/delmonte_filipino_style_tomato_sauce_90g.webp
+    - assets/delmonte_filipino_style_tomato_sauce_250g.png
+    - assets/heinz_tomato_ketchup.webp
+    - assets/jolly_kakang_gata.webp
+    - assets/Knorr_Seasoning_250ml.png
+    - assets/knorr_seasoning_1L.png
+    - assets/maggi_savor_seasoning_Calamansi.png
+    - assets/mamasita_menudo_afritada_mix.jpg
+    - assets/mamasita_oyster_sauce.webp
+    - assets/mamasita_palabok_mix.jpg
+    - assets/mamasita_tocino_mix.png
+    - assets/mang_tomas_siga_anghang_bottle.png
+    - assets/abokado.png
+    - assets/apol.webp
+    - assets/Apricot.png
+    - assets/peach.png
+    - assets/cantaloupe.png
+    - assets/Dates.png
+    - assets/demon.png
+    - assets/istroberi.webp
+    - assets/kiwi.jpg
+    - assets/lemon.webp
+    - assets/mango.webp
+    - assets/orinj.png
+    - assets/papaya.webp
+    - assets/saba.jpg
+    - assets/saging.png
+    - assets/alaska_evaporada.webp
+    - assets/Argentina_corned_beef.png
+    - assets/delmonte_fruit_and_cocktail_83g.png
+    - assets/jolly_whole_corn_kernels.webp
+    - assets/Mega_sardines_chili.webp
+    - assets/reno_liver_spread_230g.png
+    - assets/alaska_condensada.webp
+    - assets/argentina_meatloaf.png
+    - assets/delmonte_pineapple_tidbits.png
+    - assets/Jolly_Mushroom_pieces_and_stem_156g.jpg
+    - assets/Jolly_cream_corn_sweet_425g.webp
+    - assets/Libby_Vienna_Sausage.webp
+    - assets/maling_meatloaf.png
+    - assets/mega_sardines_tomato_sauce.png
+    - assets/san_marino_corned_tuna_180g.png
+
+
+  # An image asset can refer to one or more resolution-specific "variants", see
+  # https://flutter.dev/assets-and-images/#resolution-aware
+
+  # For details regarding adding assets from package dependencies, see
+  # https://flutter.dev/assets-and-images/#from-packages
+
+  # To add custom fonts to your application, add a fonts section here,
+  # in this "flutter" section. Each entry in this list should have a
+  # "family" key with the font family name, and a "fonts" key with a
+  # list giving the asset and other descriptors for the font. For
+  # example:
+  # fonts:
+  #   - family: Schyler
+  #     fonts:
+  #       - asset: fonts/Schyler-Regular.ttf
+  #       - asset: fonts/Schyler-Italic.ttf
+  #         style: italic
+  #   - family: Trajan Pro
+  #     fonts:
+  #       - asset: fonts/TrajanPro.ttf
+  #       - asset: fonts/TrajanPro_Bold.ttf
+  #         weight: 700
+  #
+  # For details regarding fonts from package dependencies,
+  # see https://flutter.dev/custom-fonts/#from-packages
