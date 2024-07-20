@@ -85,30 +85,26 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   void removeFromCart(String item) {
-    setState(() {
-      if (cartItems[item] != null && cartItems[item]! > 0) {
-        total -= 20.0; // Adjust based on your item's price logic
-        cartItems[item] = cartItems[item]! - 1;
-        if (cartItems[item] == 0) {
-          cartItems.remove(item);
-        }
-      }
-    });
-  }
+  setState(() {
+    if (cartItems.containsKey(item)) {
+      double weight = cartItems[item]!;
+      total -= 20.0 * weight; // Adjust based on your item's price logic
+      totalWeight -= weight;
+      cartItems.remove(item); // Remove the item from the cart
+    }
+  });
+}
+
 
   void handleNumpadInput(String input) {
   setState(() {
-    if (input == 'DEL' || input == 'Delete') {
-      if (currentInput.isNotEmpty) {
-        currentInput = currentInput.substring(0, currentInput.length - 1);
-        numpadController.text = currentInput;
-      }
-      if (itemToDelete != null) {
-        removeFromCart(itemToDelete!);
-        itemToDelete = null; // Clear the item to delete
-      }
-      // Reset payment amount and current input
+    if (input == 'Delete') {
+      // Clear the cart and reset total and other related variables
+      cartItems.clear();
+      total = 0.0;
+      totalWeight = 0.0;
       payment = 0.0;
+      change = 0.0;
       currentInput = '';
       numpadController.text = currentInput;
     } else if (input == 'Enter') {
@@ -483,3 +479,4 @@ class CartDisplay extends StatelessWidget {
     );
   }
 }
+
