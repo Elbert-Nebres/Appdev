@@ -41,7 +41,7 @@ class _MyHomePageState extends State<MyHomePage> {
   double change = 0.0;
   bool isNumpadVisible = false;
   String currentInput = '';
-  String? itemToDelete;
+  String? itemToDelete; // Track the item currently selected for deletion
 
   void showFruitShop() {
     setState(() {
@@ -86,85 +86,93 @@ class _MyHomePageState extends State<MyHomePage> {
 
   void removeFromCart(String item) {
     setState(() {
-      if (cartItems.containsKey(item)) {
-        total -= cartItems[item]! * 20.0; // Adjust based on item price logic
-        totalWeight -= cartItems[item]!;
-        cartItems.remove(item);
+      if (cartItems[item] != null && cartItems[item]! > 0) {
+        total -= 20.0; // Adjust based on your item's price logic
+        cartItems[item] = cartItems[item]! - 1;
+        if (cartItems[item] == 0) {
+          cartItems.remove(item);
+        }
       }
     });
   }
 
   void handleNumpadInput(String input) {
-    setState(() {
-      if (input == 'DEL' || input == 'Delete') {
-        // Clear entire cart logic
-        cartItems.clear(); // Assuming cartItems is a Map
-        total = 0.0;
-        totalWeight = 0.0; // Reset total weight
-        payment = 0.0;
-        currentInput = '';
-        numpadController.clear();
-      } else if (input == 'Enter') {
-        payment = double.tryParse(currentInput) ?? 0.0;
-        change = payment - total;
-      } else if (input == 'Cash') {
-        payment = double.tryParse(currentInput) ?? 0.0;
-        change = payment - total;
-        showDialog(
-          context: context,
-          builder: (BuildContext context) {
-            return AlertDialog(
-              title: Text('Change'),
-              content: Text('Change: Php ${change.toStringAsFixed(2)}'),
-              actions: <Widget>[
-                TextButton(
-                  child: Text('OK'),
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                ),
-              ],
-            );
-          },
-        );
-      } else if (input == 'G-cash') {
-        showDialog(
-          context: context,
-          builder: (BuildContext context) {
-            return AlertDialog(
-              title: Text('G-Cash Payment'),
-              content: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  SizedBox(
-                    width: 300, // Adjust the width as needed
-                    height: 150, // Adjust the height as needed
-                    child: Image.asset('assets/gcash.jpg'), // Adjust path if needed
-                  ),
-                  SizedBox(height: 16.0),
-                  Text(
-                    'Total: Php ${total.toStringAsFixed(2)}',
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                  ),
-                ],
-              ),
-              actions: <Widget>[
-                TextButton(
-                  child: Text('OK'),
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                ),
-              ],
-            );
-          },
-        );
-      } else {
-        currentInput += input;
+  setState(() {
+    if (input == 'DEL' || input == 'Delete') {
+      if (currentInput.isNotEmpty) {
+        currentInput = currentInput.substring(0, currentInput.length - 1);
         numpadController.text = currentInput;
       }
-    });
-  }
+      if (itemToDelete != null) {
+        removeFromCart(itemToDelete!);
+        itemToDelete = null; // Clear the item to delete
+      }
+      // Reset payment amount and current input
+      payment = 0.0;
+      currentInput = '';
+      numpadController.text = currentInput;
+    } else if (input == 'Enter') {
+      payment = double.tryParse(currentInput) ?? 0.0;
+      change = payment - total;
+    } else if (input == 'Cash') {
+      payment = double.tryParse(currentInput) ?? 0.0;
+      change = payment - total;
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('Change'),
+            content: Text('Change: Php ${change.toStringAsFixed(2)}'),
+            actions: <Widget>[
+              TextButton(
+                child: Text('OK'),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          );
+        },
+      );
+    } else if (input == 'G-cash') {
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('G-Cash Payment'),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                SizedBox(
+                  width: 400, // Adjust the width as needed
+                  height: 350, // Adjust the height as needed
+                  child: Image.asset('assets/gcash.jpg'), // Adjust path if needed
+                ),
+                SizedBox(height: 16.0),
+                Text(
+                  'Total: Php ${total.toStringAsFixed(2)}',
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                ),
+              ],
+            ),
+            actions: <Widget>[
+              TextButton(
+                child: Text('OK'),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          );
+        },
+      );
+    } else {
+      currentInput += input;
+      numpadController.text = currentInput;
+    }
+  });
+}
+
 
   @override
   Widget build(BuildContext context) {
@@ -173,6 +181,7 @@ class _MyHomePageState extends State<MyHomePage> {
       color: Colors.grey[200],
       child: Row(
         children: <Widget>[
+          // Left side with categories and large display area
           Expanded(
             child: Column(
               children: <Widget>[
@@ -202,6 +211,7 @@ class _MyHomePageState extends State<MyHomePage> {
               ],
             ),
           ),
+          // Right side with cart display area
           Expanded(
             child: Column(
               children: <Widget>[
@@ -218,7 +228,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         totalWeight: totalWeight,
                         payment: payment,
                         change: change,
-                        onRemoveItem: removeFromCart, 
+                        removeFromCart: removeFromCart, // Pass the removeFromCart function
                       ),
                     ),
                   ),
@@ -230,30 +240,23 @@ class _MyHomePageState extends State<MyHomePage> {
                     elevation: 4,
                     child: Column(
                       children: <Widget>[
-                        if (isNumpadVisible)
-                          SizedBox(
-                            height: 300, // Fixed height for numpad container
-                            child: Column(
-                              children: [
-                                Padding(
-                                  padding: const EdgeInsets.all(16.0),
-                                  child: Text(
-                                    'Current Input: $currentInput',
-                                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-                                  ),
+                        // Numpad visibility toggle
+                        Visibility(
+                          visible: isNumpadVisible,
+                          child: Column(
+                            children: [
+                              // Display current input
+                              Padding(
+                                padding: const EdgeInsets.all(16.0),
+                                child: Text(
+                                  'Current Input: $currentInput',
+                                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                                 ),
-                                Expanded(
-                                  child: SingleChildScrollView(
-                                    child: Column(
-                                      children: [
-                                        _buildNumpad(),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
+                              ),
+                              _buildKeypadAndActions(), // Ensure this is defined
+                            ],
                           ),
+                        ),
                         SizedBox(height: 8.0),
                         ElevatedButton(
                           onPressed: () {
@@ -321,9 +324,9 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
-  Widget _buildNumpad() {
+  Widget _buildKeypadAndActions() {
     return Column(
-      children: [
+      children: <Widget>[
         _buildKeypadRow(['7', '8', '9']),
         SizedBox(height: 8.0),
         _buildKeypadRow(['4', '5', '6']),
@@ -332,11 +335,10 @@ class _MyHomePageState extends State<MyHomePage> {
         SizedBox(height: 8.0),
         _buildKeypadRow(['0', '00', '.']),
         SizedBox(height: 8.0),
-        _buildKeypadRow(['DEL', 'Enter']),
+        _buildKeypadRow(['Delete', 'Enter']),
         SizedBox(height: 8.0),
-        _buildActionRow(['Cash'], [Colors.green, Colors.red]),
-        SizedBox(height: 8.0),
-        _buildActionRow(['G-cash']),
+        _buildActionRow(['Cash', 'G-cash'], [Colors.green, Colors.red]),
+       
       ],
     );
   }
@@ -345,46 +347,26 @@ class _MyHomePageState extends State<MyHomePage> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: keys.map((key) {
-        return SizedBox(
-          width: 60, // Adjust width as needed
-          height: 60, // Adjust height as needed
-          child: KeypadButton(
-            label: key,
-            onPressed: () => handleNumpadInput(key),
-          ),
+        return ElevatedButton(
+          onPressed: () => handleNumpadInput(key),
+          child: Text(key),
         );
       }).toList(),
     );
   }
 
-  Widget _buildActionRow(List<String> labels, [List<Color>? colors]) {
+  Widget _buildActionRow(List<String> actions, [List<Color>? colors]) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      children: labels.asMap().entries.map((entry) {
-        int index = entry.key;
-        String label = entry.value;
-        Color color = colors?[index] ?? Colors.blueAccent;
-
-        return SizedBox(
-          width: 60, // Adjust width as needed
-          height: 60, // Adjust height as needed
-          child: ElevatedButton(
-            onPressed: () => handleNumpadInput(label),
-            child: Text(
-              label,
-              style: TextStyle(color: Colors.white),
-            ),
-            style: ElevatedButton.styleFrom(
-              backgroundColor: color,
-              foregroundColor: Colors.white,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.zero,
-              ),
-              padding: EdgeInsets.all(16.0),
-            ),
+      children: List.generate(actions.length, (index) {
+        return ElevatedButton(
+          onPressed: () => handleNumpadInput(actions[index]),
+          style: ElevatedButton.styleFrom(
+            backgroundColor: colors?[index] ?? Colors.blue, // Button color
           ),
+          child: Text(actions[index]),
         );
-      }).toList(),
+      }),
     );
   }
 }
@@ -393,41 +375,56 @@ class KeypadButton extends StatelessWidget {
   final String label;
   final VoidCallback onPressed;
 
-  KeypadButton({
-    required this.label,
-    required this.onPressed,
-  });
+  KeypadButton({required this.label, required this.onPressed});
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: EdgeInsets.all(4.0),
-      child: ElevatedButton(
-        onPressed: onPressed,
-        child: Text(
-          label,
-          style: TextStyle(color: Colors.black), // Text color
+    return ElevatedButton(
+      onPressed: onPressed,
+      child: Text(label),
+      style: ElevatedButton.styleFrom(
+        backgroundColor: Colors.grey[200], // Background color
+        foregroundColor: Colors.black, // Text color
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(8.0)),
         ),
-        style: ElevatedButton.styleFrom(
-          backgroundColor: Colors.white, // Background color
-          foregroundColor: Colors.black, // Text color
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.zero,
-          ),
-          padding: EdgeInsets.all(16.0), // Adjust padding as needed
+        elevation: 2,
+      ),
+    );
+  }
+}
+
+class ActionButton extends StatelessWidget {
+  final String label;
+  final Color? color;
+  final VoidCallback onPressed;
+
+  ActionButton({required this.label, this.color, required this.onPressed});
+
+  @override
+  Widget build(BuildContext context) {
+    return ElevatedButton(
+      onPressed: onPressed,
+      child: Text(label),
+      style: ElevatedButton.styleFrom(
+        backgroundColor: color ?? Colors.grey[200], // Background color
+        foregroundColor: Colors.black, // Text color
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(8.0)),
         ),
+        elevation: 2,
       ),
     );
   }
 }
 
 class CartDisplay extends StatelessWidget {
-  final Map<String, double> cartItems;
+  final Map<String, double> cartItems; // Store weights as double
   final double total;
   final double totalWeight;
   final double payment;
   final double change;
-  final Function(String) onRemoveItem;
+  final void Function(String) removeFromCart; // Function to remove items from cart
 
   CartDisplay({
     required this.cartItems,
@@ -435,7 +432,7 @@ class CartDisplay extends StatelessWidget {
     required this.totalWeight,
     required this.payment,
     required this.change,
-    required this.onRemoveItem,
+    required this.removeFromCart, // Initialize the removeFromCart function
   });
 
   @override
@@ -449,7 +446,7 @@ class CartDisplay extends StatelessWidget {
               String item = cartItems.keys.elementAt(index);
               double weight = cartItems[item] ?? 0.0;
 
-              if (weight == 0) return Container(); // Skip items with 0 weight
+              if (weight == 0.0) return Container(); // Skip items with 0 weight
 
               return ListTile(
                 title: Text(item),
@@ -457,10 +454,9 @@ class CartDisplay extends StatelessWidget {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Text('${weight.toStringAsFixed(2)} kg'),
-                    SizedBox(width: 10), // Spacing between text and button
                     IconButton(
-                      icon: Icon(Icons.remove_circle, color: Colors.red),
-                      onPressed: () => onRemoveItem(item),
+                      icon: Icon(Icons.delete, color: Colors.red),
+                      onPressed: () => removeFromCart(item), // Call remove function
                     ),
                   ],
                 ),

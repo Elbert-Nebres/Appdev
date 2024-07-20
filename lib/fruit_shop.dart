@@ -59,7 +59,7 @@ FruitCard(
 FruitCard(
   title: 'Peach',
   pricePerKg: 15.0,
-  image: 'assets/bitch.png',
+  image: 'assets/peach.png',
   addWeightToTotal: addWeightToTotal,
 ),
 FruitCard(
