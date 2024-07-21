@@ -24,14 +24,7 @@ class CannedGoodsShop extends StatelessWidget {
           addToCart: () => addToCart('Beans'),
           removeFromCart: () => removeFromCart('Beans'),
         ),
-        CannedGoodsCard(
-          title: 'Corn',
-          price: 30.0,
-          image: 'assets/corn.jpg',
-          quantity: cartItems['Corn'] ?? 0.0, // Using double for quantity
-          addToCart: () => addToCart('Corn'),
-          removeFromCart: () => removeFromCart('Corn'),
-        ),
+        
         CannedGoodsCard(
           title: 'Evaporated Milk',
           price: 28.0,
