@@ -67,6 +67,44 @@ class _MyHomePageState extends State<MyHomePage> {
       selectedCategory = 'Condiments';
     });
   }
+void _showDeleteConfirmationDialog() {
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: Text('Delete Item'),
+        content: Text('Are you sure you want to delete this item from the cart?'),
+        actions: <Widget>[
+          TextButton(
+            child: Text('Cancel'),
+            onPressed: () {
+              Navigator.of(context).pop(); // Close the dialog
+            },
+          ),
+          TextButton(
+            child: Text('Delete'),
+            onPressed: () {
+              if (itemToDelete != null) {
+                // Clear all items from the cart
+                setState(() {
+                  cartItems.clear(); // Clear the cart
+                  total = 0.0; // Reset total
+                  totalWeight = 0.0; // Reset total weight
+                  payment = 0.0; // Reset payment
+                  change = 0.0; // Reset change
+                  currentInput = ''; // Clear current input
+                  numpadController.text = currentInput; // Update numpadController
+                  itemToDelete = null; // Reset itemToDelete
+                });
+              }
+              Navigator.of(context).pop(); // Close the dialog
+            },
+          ),
+        ],
+      );
+    },
+  );
+}
 
   void addWeightToTotal(double weight, String itemName) {
     setState(() {
@@ -127,14 +165,7 @@ class _MyHomePageState extends State<MyHomePage> {
 void handleNumpadInput(String input) {
   setState(() {
     if (input == 'Delete') {
-      // Clear the cart and reset total and other related variables
-      cartItems.clear();
-      total = 0.0;
-      totalWeight = 0.0;
-      payment = 0.0;
-      change = 0.0;
-      currentInput = '';
-      numpadController.text = currentInput;
+      _showDeleteConfirmationDialog();
     } else if (input == 'Enter') {
       payment = double.tryParse(currentInput) ?? 0.0;
       change = payment - total;
