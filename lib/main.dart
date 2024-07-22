@@ -16,7 +16,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Online Point of Sales System',
-      initialRoute: '/',
+      initialRoute: '/login',
       routes: {
         '/login': (context) => LoginPage(), // Route for LoginPage
         '/home': (context) => MyHomePage(), // Route for Product Page
