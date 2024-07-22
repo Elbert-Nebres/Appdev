@@ -10,6 +10,7 @@ import 'product.dart';
 void main() {
   runApp(MyApp());
 }
+
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -19,10 +20,12 @@ class MyApp extends StatelessWidget {
       routes: {
         '/': (context) => LoginPage(), // Route for LoginPage
         '/home': (context) => MyHomePage(), // Route for Product Page
+        '/cashier_dashboard': (context) => CashierDashboard(), // Route for CashierDashboard
       },
     );
   }
 }
+
 
 class MyHomePage extends StatefulWidget {
   @override
@@ -64,146 +67,212 @@ class _MyHomePageState extends State<MyHomePage> {
       selectedCategory = 'Condiments';
     });
   }
-void addWeightToTotal(double weight, String itemName) {
-  setState(() {
-    double pricePerUnit = itemPrices[itemName] ?? 0.0;
-    if (weight <= 0) return; // Skip invalid weights
-    double currentWeight = cartItems[itemName] ?? 0.0;
-    double previousTotal = total;
-    
-    // Update cart items with new weight
-    cartItems[itemName] = currentWeight + weight;
-    
-    // Update total weight and total cost
-    totalWeight += weight;
-    total += pricePerUnit * weight; 
 
-    // Debugging
-    print('Item: $itemName');
-    print('Price per unit: $pricePerUnit');
-    print('Weight added: $weight');
-    print('New Total Weight: $totalWeight');
-    print('Previous Total: $previousTotal');
-    print('New Total: $total');
-  });
-}
-
-
-
-
-
-
-  void addToCart(String item) {
-  setState(() {
-    double pricePerUnit = itemPrices[item] ?? 0.0;
-    cartItems[item] = (cartItems[item] ?? 0) + 1;
-    total += pricePerUnit; // Use the price of the item
-    itemToDelete = item; // Set itemToDelete to the last added item
-  });
-}
-
-
-void removeFromCart(String item) {
-  setState(() {
-    if (cartItems.containsKey(item)) {
-      double weight = cartItems[item]!;
-      double pricePerUnit = itemPrices[item] ?? 0.0;
+  void addWeightToTotal(double weight, String itemName) {
+    setState(() {
+      double pricePerUnit = itemPrices[itemName] ?? 0.0;
+      if (weight <= 0) return; // Skip invalid weights
+      double currentWeight = cartItems[itemName] ?? 0.0;
       double previousTotal = total;
-      
-      // Update total and weight
-      total -= pricePerUnit * weight;
-      totalWeight -= weight;
-      cartItems.remove(item); // Remove the item from the cart
+
+      // Update cart items with new weight
+      cartItems[itemName] = currentWeight + weight;
+
+      // Update total weight and total cost
+      totalWeight += weight;
+      total += pricePerUnit * weight; 
 
       // Debugging
-      print('Item Removed: $item');
+      print('Item: $itemName');
       print('Price per unit: $pricePerUnit');
-      print('Weight removed: $weight');
+      print('Weight added: $weight');
       print('New Total Weight: $totalWeight');
       print('Previous Total: $previousTotal');
       print('New Total: $total');
+    });
+  }
+
+  void addToCart(String item) {
+    setState(() {
+      double pricePerUnit = itemPrices[item] ?? 0.0;
+      cartItems[item] = (cartItems[item] ?? 0) + 1;
+      total += pricePerUnit; // Use the price of the item
+      itemToDelete = item; // Set itemToDelete to the last added item
+    });
+  }
+
+  void removeFromCart(String item) {
+    setState(() {
+      if (cartItems.containsKey(item)) {
+        double weight = cartItems[item]!;
+        double pricePerUnit = itemPrices[item] ?? 0.0;
+        double previousTotal = total;
+
+        // Update total and weight
+        total -= pricePerUnit * weight;
+        totalWeight -= weight;
+        cartItems.remove(item); // Remove the item from the cart
+
+        // Debugging
+        print('Item Removed: $item');
+        print('Price per unit: $pricePerUnit');
+        print('Weight removed: $weight');
+        print('New Total Weight: $totalWeight');
+        print('Previous Total: $previousTotal');
+        print('New Total: $total');
+      }
+    });
+  }
+
+void handleNumpadInput(String input) {
+  setState(() {
+    if (input == 'Delete') {
+      // Clear the cart and reset total and other related variables
+      cartItems.clear();
+      total = 0.0;
+      totalWeight = 0.0;
+      payment = 0.0;
+      change = 0.0;
+      currentInput = '';
+      numpadController.text = currentInput;
+    } else if (input == 'Enter') {
+      payment = double.tryParse(currentInput) ?? 0.0;
+      change = payment - total;
+    } else if (input == 'Cash') {
+      payment = double.tryParse(currentInput) ?? 0.0;
+      change = payment - total;
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('Cash Payment'),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  'Total: Php ${total.toStringAsFixed(2)}',
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                ),
+                Text(
+                  'Payment: Php ${payment.toStringAsFixed(2)}',
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                ),
+                Text(
+                  'Change: Php ${change.toStringAsFixed(2)}',
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                ),
+              ],
+            ),
+            actions: <Widget>[
+              TextButton(
+                child: Text('OK'),
+                onPressed: () {
+                  setState(() {
+                    // Clear all products and reset values
+                    cartItems.clear();
+                    total = 0.0;
+                    totalWeight = 0.0;
+                    payment = 0.0;
+                    change = 0.0;
+                    currentInput = '';
+                    numpadController.text = currentInput;
+                  });
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          );
+        },
+      );
+    } else if (input == 'G-cash') {
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('G-Cash Payment'),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                SizedBox(
+                  width: 400, // Adjust the width as needed
+                  height: 350, // Adjust the height as needed
+                  child: Image.asset('assets/gcash.JFIF'), // Adjust path if needed
+                ),
+                SizedBox(height: 16.0),
+                Text(
+                  'Total: Php ${total.toStringAsFixed(2)}',
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                ),
+              ],
+            ),
+            actions: <Widget>[
+              TextButton(
+                child: Text('OK'),
+                onPressed: () {
+                  setState(() {
+                    // Clear all products and reset values
+                    cartItems.clear();
+                    total = 0.0;
+                    totalWeight = 0.0;
+                    payment = 0.0;
+                    change = 0.0;
+                    currentInput = '';
+                    numpadController.text = currentInput;
+                  });
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          );
+        },
+      );
+    } else if (input == '<=') {
+      if (currentInput.isNotEmpty) {
+        currentInput = currentInput.substring(0, currentInput.length - 1); // Remove last character
+        numpadController.text = currentInput;
+      }
+    } else {
+      currentInput += input;
+      numpadController.text = currentInput;
     }
   });
 }
 
 
+ void _onButtonPressed() {
+  Navigator.push(
+    context,
+    MaterialPageRoute(builder: (context) => CashierDashboard()),
+  );
+}
 
-  void handleNumpadInput(String input) {
-    setState(() {
-      if (input == 'Delete') {
-        // Clear the cart and reset total and other related variables
-        cartItems.clear();
-        total = 0.0;
-        totalWeight = 0.0;
-        payment = 0.0;
-        change = 0.0;
-        currentInput = '';
-        numpadController.text = currentInput;
-      } else if (input == 'Enter') {
-        payment = double.tryParse(currentInput) ?? 0.0;
-        change = payment - total;
-      } else if (input == 'Cash') {
-        payment = double.tryParse(currentInput) ?? 0.0;
-        change = payment - total;
-        showDialog(
-          context: context,
-          builder: (BuildContext context) {
-            return AlertDialog(
-              title: Text('Change'),
-              content: Text('Change: Php ${change.toStringAsFixed(2)}'),
-              actions: <Widget>[
-                TextButton(
-                  child: Text('OK'),
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                ),
-              ],
-            );
-          },
-        );
-      } else if (input == 'G-cash') {
-        showDialog(
-          context: context,
-          builder: (BuildContext context) {
-            return AlertDialog(
-              title: Text('G-Cash Payment'),
-              content: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  SizedBox(
-                    width: 400, // Adjust the width as needed
-                    height: 350, // Adjust the height as needed
-                    child: Image.asset('assets/gcash.JFIF'), // Adjust path if needed
-                  ),
-                  SizedBox(height: 16.0),
-                  Text(
-                    'Total: Php ${total.toStringAsFixed(2)}',
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                  ),
-                ],
+@override
+Widget build(BuildContext context) {
+  return Scaffold(
+    appBar: AppBar(
+      title: Text('Online Point of Sales System'),
+      actions: <Widget>[
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: SizedBox(
+            width: 200,
+            child: TextField(
+              decoration: InputDecoration(
+                labelText: 'Search',
+                border: OutlineInputBorder(),
               ),
-              actions: <Widget>[
-                TextButton(
-                  child: Text('OK'),
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                ),
-              ],
-            );
-          },
-        );
-      } else {
-        currentInput += input;
-        numpadController.text = currentInput;
-      }
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
+              enabled: false, // Disable the search textbox
+            ),
+          ),
+        ),
+        IconButton(
+          icon: Icon(Icons.person),
+          onPressed: _onButtonPressed, // New button
+        ),
+        SizedBox(width: 16.0),
+      ],
+    ),
+    body: Container(
       padding: EdgeInsets.all(8.0),
       color: Colors.grey[200],
       child: Row(
@@ -227,12 +296,13 @@ void removeFromCart(String item) {
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: <Widget>[
                     _buildCategoryButton('Vegetable', showVegetableShop),
-                    SizedBox(width: 8.0),
+                    SizedBox(width: 7.0),
                     _buildCategoryButton('Fruit', showFruitShop),
-                    SizedBox(width: 8.0),
+                    SizedBox(width: 7.0),
                     _buildCategoryButton('Canned Goods', showCannedGoodsShop),
-                    SizedBox(width: 8.0),
+                    SizedBox(width: 7.0),
                     _buildCategoryButton('Condiments', showCondimentsShop),
+                     SizedBox(width: 7.0),
                   ],
                 ),
               ],
@@ -245,7 +315,7 @@ void removeFromCart(String item) {
                 Expanded(
                   child: Container(
                     color: Colors.white,
-                    margin: EdgeInsets.all(8.0),
+                    margin: EdgeInsets.all(10.0),
                     padding: EdgeInsets.all(8.0),
                     child: Card(
                       elevation: 4,
@@ -284,7 +354,7 @@ void removeFromCart(String item) {
                             ],
                           ),
                         ),
-                        SizedBox(height: 8.0),
+                       
                         ElevatedButton(
                           onPressed: () {
                             setState(() {
@@ -302,8 +372,11 @@ void removeFromCart(String item) {
           ),
         ],
       ),
-    );
-  }
+    ),
+  );
+}
+
+
 
   Widget _getShopWidget() {
     switch (selectedCategory) {
@@ -360,7 +433,7 @@ void removeFromCart(String item) {
         SizedBox(height: 4.0), // Reduced size
         _buildKeypadRow(['1', '2', '3']),
         SizedBox(height: 4.0), // Reduced size
-        _buildKeypadRow(['0', '00', '.']),
+        _buildKeypadRow(['0', '.', '<=']),
         SizedBox(height: 4.0), // Reduced size
         _buildKeypadRow(['Delete', 'Enter']),
         SizedBox(height: 4.0), // Reduced size
