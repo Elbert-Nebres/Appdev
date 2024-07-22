@@ -42,12 +42,7 @@ class FruitShop extends StatelessWidget {
           image: 'assets/abokado.png',
           addWeightToTotal: addWeightToTotal,
         ),
-        FruitCard(
-          title: 'Apol',
-          pricePerKg: 30.0,
-          image: 'assets/apol.webp',
-          addWeightToTotal: addWeightToTotal,
-        ),
+       
         FruitCard(
           title: 'Apricot',
           pricePerKg: 40.0,
