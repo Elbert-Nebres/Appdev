@@ -12,7 +12,8 @@ class CashierDashboard extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.black,
-        title: const Text('Dashboard',
+        title: const Text(
+          'Cashier Dashboard',
           style: TextStyle(
             color: Colors.white,
             fontSize: 20,
@@ -32,6 +33,12 @@ class CashierDashboard extends StatelessWidget {
           Icon(
             Icons.arrow_drop_down,
             color: Colors.white,
+          ),
+          IconButton(
+            icon: Icon(Icons.logout),
+            onPressed: () {
+              _showLogoutDialog(context);
+            },
           ),
         ],
       ),
@@ -112,6 +119,33 @@ class CashierDashboard extends StatelessWidget {
           ),
         ),
       ),
+    );
+  }
+
+  void _showLogoutDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Logout'),
+          content: Text('Are you sure you want to logout?'),
+          actions: <Widget>[
+            TextButton(
+              child: Text('Cancel'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              child: Text('Logout'),
+              onPressed: () {
+                Navigator.of(context).pop();
+                Navigator.pushReplacementNamed(context, '/login');
+              },
+            ),
+          ],
+        );
+      },
     );
   }
 

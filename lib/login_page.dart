@@ -30,6 +30,7 @@ class _LoginPageState extends State<LoginPage> {
       appBar: AppBar(
         title: const Text('Login Page'),
         backgroundColor: Colors.blue, // Blue color for AppBar
+        automaticallyImplyLeading: false, // Remove the back button
       ),
       body: Stack(
         fit: StackFit.expand,

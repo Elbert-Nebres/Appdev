@@ -18,7 +18,7 @@ class MyApp extends StatelessWidget {
       title: 'Online Point of Sales System',
       initialRoute: '/',
       routes: {
-        '/': (context) => LoginPage(), // Route for LoginPage
+        '/login': (context) => LoginPage(), // Route for LoginPage
         '/home': (context) => MyHomePage(), // Route for Product Page
         '/cashier_dashboard': (context) => CashierDashboard(), // Route for CashierDashboard
       },
