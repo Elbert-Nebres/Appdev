@@ -8,8 +8,6 @@ void main() {
   runApp(MyApp());
 }
 final Map<String, double> itemPrices = {
-  
-
 'Mustard' : 20.0,
 'Datu Puti Soy Sauce Sachet' : 10.0,
 'Mang Tomas 1 Bottle' : 20.0,
@@ -68,15 +66,12 @@ final Map<String, double> itemPrices = {
 'Saba': 15.00,
 'Saging': 18.00,
 'Beans': 25.00,
-
 'Evaporated Milk': 28.00,
 'Corned Beef': 35.00,
 'Fruit Cocktail': 32.00,
 'Whole Corn Kernels': 27.00,
 'Mega Sardines (Chili)': 29.00,
 'Liver Spread': 26.00,
-
-
 };
 class MyApp extends StatelessWidget {
   @override
@@ -159,12 +154,6 @@ void addWeightToTotal(double weight, String itemName) {
     print('New Total: $total');
   });
 }
-
-
-
-
-
-
   void addToCart(String item) {
   setState(() {
     double pricePerUnit = itemPrices[item] ?? 0.0;
@@ -173,8 +162,6 @@ void addWeightToTotal(double weight, String itemName) {
     itemToDelete = item; // Set itemToDelete to the last added item
   });
 }
-
-
 void removeFromCart(String item) {
   setState(() {
     if (cartItems.containsKey(item)) {
@@ -197,9 +184,6 @@ void removeFromCart(String item) {
     }
   });
 }
-
-
-
   void handleNumpadInput(String input) {
     setState(() {
       if (input == 'Delete') {
@@ -272,7 +256,6 @@ void removeFromCart(String item) {
       }
     });
   }
-
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -571,7 +554,7 @@ class CartDisplay extends StatelessWidget {
                 trailing: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Text('${weight.toStringAsFixed(2)} kg'),
+                    Text('${weight.toStringAsFixed(2)}'),
                     IconButton(
                       icon: Icon(Icons.delete, color: Colors.red),
                       onPressed: () => removeFromCart(item), // Call remove function
