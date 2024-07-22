@@ -281,6 +281,7 @@ void handleNumpadInput(String input) {
 Widget build(BuildContext context) {
   return Scaffold(
     appBar: AppBar(
+      automaticallyImplyLeading: false, // Remove the back button
       title: Text('Online Point of Sales System'),
       actions: <Widget>[
         Padding(
@@ -333,7 +334,7 @@ Widget build(BuildContext context) {
                     _buildCategoryButton('Canned Goods', showCannedGoodsShop),
                     SizedBox(width: 7.0),
                     _buildCategoryButton('Condiments', showCondimentsShop),
-                     SizedBox(width: 7.0),
+                    SizedBox(width: 7.0),
                   ],
                 ),
               ],
@@ -385,7 +386,6 @@ Widget build(BuildContext context) {
                             ],
                           ),
                         ),
-                       
                         ElevatedButton(
                           onPressed: () {
                             setState(() {
@@ -406,6 +406,7 @@ Widget build(BuildContext context) {
     ),
   );
 }
+
 
 
 
