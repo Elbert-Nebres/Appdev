@@ -14,7 +14,7 @@ class CondimentsShop extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GridView.count(
-      crossAxisCount: 2,
+      crossAxisCount: 3,
       children: [
         CondimentsCard(
           title: 'Ketchup',
@@ -215,7 +215,7 @@ class CondimentsCard extends StatelessWidget {
           Image.asset(
             image,
             width: 100,
-            height: 100,
+            height: 50,
           ),
           Text(title),
           Text(price),

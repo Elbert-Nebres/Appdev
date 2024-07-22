@@ -499,7 +499,7 @@ class CartDisplay extends StatelessWidget {
                 trailing: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Text('${weight.toStringAsFixed(2)} kg'),
+                    Text('${weight.toStringAsFixed(2)}'),
                     IconButton(
                       icon: Icon(Icons.delete, color: Colors.red),
                       onPressed: () => removeFromCart(item), // Call remove function

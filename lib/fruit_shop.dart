@@ -10,7 +10,7 @@ class FruitShop extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GridView.count(
-      crossAxisCount: 2,
+      crossAxisCount: 3,
       children: [
         FruitCard(
           title: 'Orange',
@@ -78,12 +78,7 @@ class FruitShop extends StatelessWidget {
           image: 'assets/demon.png',
           addWeightToTotal: addWeightToTotal,
         ),
-        FruitCard(
-          title: 'Istroberi',
-          pricePerKg: 28.0,
-          image: 'assets/istroberi.webp',
-          addWeightToTotal: addWeightToTotal,
-        ),
+       
         FruitCard(
           title: 'Kiwi',
           pricePerKg: 35.0,

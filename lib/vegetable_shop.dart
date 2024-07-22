@@ -12,7 +12,7 @@ class VegetableShop extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GridView.count(
-      crossAxisCount: 2,
+      crossAxisCount: 3,
       children: [
         VegetableCard(
           title: 'Bokchoi',
