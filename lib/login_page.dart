@@ -13,20 +13,12 @@ class _LoginPageState extends State<LoginPage> {
   void _login() {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
-      if (_username == 'name') {
+      if (_username == 'name' && _password == 'password') {
         // Navigate to the home page (product page) on successful login
         Navigator.pushReplacementNamed(context, '/home');
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Invalid username')),
-        );
-      }
-      if (_password == 'password') {
-        // Navigate to the home page (product page) on successful login
-        Navigator.pushReplacementNamed(context, '/home');
-      } else {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Invalid password')),
+          SnackBar(content: Text('Invalid username or password')),
         );
       }
     }
@@ -36,48 +28,76 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Login'),
+        title: const Text('Login'),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Form(
-          key: _formKey,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              TextFormField(
-                decoration: InputDecoration(labelText: 'Username'),
-                validator: (value) {
-                  if (value!.isEmpty) {
-                    return 'Please enter your username';
-                  }
-                  return null;
-                },
-                onSaved: (value) => _username = value!,
-              ),
-              SizedBox(height: 16.0),
-              TextFormField(
-                obscureText: true,
-                decoration: InputDecoration(labelText: 'Password'),
-                validator: (value) {
-                  if (value!.isEmpty) {
-                    return 'Please enter your password';
-                  }
-                  return null;
-                },
-                onSaved: (value) => _password = value!,
-              ),
-              SizedBox(height: 32.0),
-              ElevatedButton(
-                onPressed: _login, // Call the _login method
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.yellow,
-                  padding: const EdgeInsets.symmetric(horizontal: 40.0, vertical: 16.0),
-                  textStyle: const TextStyle(fontSize: 18.0),
+      body: Center(
+        child: Container(
+          width: 300.0,
+          padding: const EdgeInsets.all(35.0),
+          decoration: BoxDecoration(
+            border: Border.all(width: 2.0),
+            borderRadius: BorderRadius.circular(10.0),
+          ),
+          child: Form(
+            key: _formKey,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Row(
+                  children: [
+                    const Text('Username'),
+                    const SizedBox(width: 16.0),
+                    Flexible(
+                      child: TextFormField(
+                        decoration: const InputDecoration(
+                          border: OutlineInputBorder(),
+                        ),
+                        validator: (value) {
+                          if (value!.isEmpty) {
+                            return 'Please enter your username';
+                          }
+                          return null;
+                        },
+                        onSaved: (value) => _username = value!,
+                      ),
+                    ),
+                  ],
                 ),
-                child: const Text('Login'),
-              ),
-            ],
+                const SizedBox(height: 16.0),
+                Row(
+                  children: [
+                    const Text('Password'),
+                    const SizedBox(width: 16.0),
+                    Flexible(
+                      child: TextFormField(
+                        obscureText: true,
+                        decoration: const InputDecoration(
+                          border: OutlineInputBorder(),
+                        ),
+                        validator: (value) {
+                          if (value!.isEmpty) {
+                            return 'Please enter your password';
+                          }
+                          return null;
+                        },
+                        onSaved: (value) => _password = value!,
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 32.0),
+                ElevatedButton(
+                  onPressed: _login,
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.yellow,
+                    padding: const EdgeInsets.symmetric(horizontal: 45.0, vertical: 20.0),
+                    textStyle: const TextStyle(fontSize: 18.0),
+                  ),
+                  child: const Text('Login'),
+                ),
+                const SizedBox(height: 20.0, width: 20.0),
+              ],
+            ),
           ),
         ),
       ),
