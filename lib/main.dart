@@ -12,6 +12,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+<<<<<<< Updated upstream
       theme: ThemeData(
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
@@ -22,6 +23,18 @@ class MyApp extends StatelessWidget {
         ),
         body: MyHomePage(),
       ),
+=======
+      title: 'POS System',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+      ),
+      initialRoute: '/login',
+      routes: {
+        '/login': (context) => LoginPage(),
+        '/home': (context) => MyHomePage(),  // Updated route
+        '/cashier': (context) => CashierDashboard(), // Updated route
+      },
+>>>>>>> Stashed changes
     );
   }
 }
@@ -116,6 +129,7 @@ void removeFromCart(String item) {
       print('New Total Weight: $totalWeight');
       print('Previous Total: $previousTotal');
       print('New Total: $total');
+<<<<<<< Updated upstream
     }
   });
 }
@@ -194,6 +208,221 @@ void removeFromCart(String item) {
   @override
   Widget build(BuildContext context) {
     return Container(
+=======
+    });
+  }
+
+  void addToCart(String item) {
+    setState(() {
+      double pricePerUnit = itemPrices[item] ?? 0.0;
+      cartItems[item] = (cartItems[item] ?? 0) + 1;
+      total += pricePerUnit; // Use the price of the item
+      itemToDelete = item; // Set itemToDelete to the last added item
+    });
+  }
+
+  void removeFromCart(String item) {
+    setState(() {
+      if (cartItems.containsKey(item)) {
+        double weight = cartItems[item]!;
+        double pricePerUnit = itemPrices[item] ?? 0.0;
+        double previousTotal = total;
+
+        // Update total and weight
+        total -= pricePerUnit * weight;
+        totalWeight -= weight;
+        cartItems.remove(item); // Remove the item from the cart
+
+        // Debugging
+        print('Item Removed: $item');
+        print('Price per unit: $pricePerUnit');
+        print('Weight removed: $weight');
+        print('New Total Weight: $totalWeight');
+        print('Previous Total: $previousTotal');
+        print('New Total: $total');
+      }
+    });
+  }
+
+void handleNumpadInput(String input) {
+  setState(() {
+    if (input == 'Delete') {
+      _showDeleteConfirmationDialog();
+    } else if (input == 'Enter') {
+      payment = double.tryParse(currentInput) ?? 0.0;
+      change = payment - total;
+    } else if (input == 'Cash') {
+      payment = double.tryParse(currentInput) ?? 0.0;
+      change = payment - total;
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('Cash Payment'),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  'Total: Php ${total.toStringAsFixed(2)}',
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                ),
+                Text(
+                  'Payment: Php ${payment.toStringAsFixed(2)}',
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                ),
+                Text(
+                  'Change: Php ${change.toStringAsFixed(2)}',
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                ),
+              ],
+            ),
+            actions: <Widget>[
+              TextButton(
+                child: Text('OK'),
+                onPressed: () {
+                  setState(() {
+                    // Clear all products and reset values
+                    cartItems.clear();
+                    total = 0.0;
+                    totalWeight = 0.0;
+                    payment = 0.0;
+                    change = 0.0;
+                    currentInput = '';
+                    numpadController.text = currentInput;
+                  });
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          );
+        },
+      );
+    } else if (input == 'G-cash') {
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('G-Cash Payment'),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                SizedBox(
+                  width: 400, // Adjust the width as needed
+                  height: 350, // Adjust the height as needed
+                  child: Image.asset('assets/gcash.JFIF'), // Adjust path if needed
+                ),
+                SizedBox(height: 16.0),
+                Text(
+                  'Total: Php ${total.toStringAsFixed(2)}',
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                ),
+              ],
+            ),
+            actions: <Widget>[
+              TextButton(
+                child: Text('OK'),
+                onPressed: () {
+                  setState(() {
+                    // Clear all products and reset values
+                    cartItems.clear();
+                    total = 0.0;
+                    totalWeight = 0.0;
+                    payment = 0.0;
+                    change = 0.0;
+                    currentInput = '';
+                    numpadController.text = currentInput;
+                  });
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          );
+        },
+      );
+    } else if (input == '<=') {
+      if (currentInput.isNotEmpty) {
+        currentInput = currentInput.substring(0, currentInput.length - 1); // Remove last character
+        numpadController.text = currentInput;
+      }
+    } else {
+      currentInput += input;
+      numpadController.text = currentInput;
+    }
+  });
+}
+void _showDeleteConfirmationDialog() {
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: Text('Confirm Deletion'),
+        content: Text('Are you sure you want to delete all items from the cart?'),
+        actions: <Widget>[
+          TextButton(
+            child: Text('Cancel'),
+            onPressed: () {
+              Navigator.of(context).pop(); // Close the dialog
+            },
+          ),
+          TextButton(
+            child: Text('Delete'),
+            onPressed: () {
+              setState(() {
+                // Clear all products and reset values
+                cartItems.clear();
+                total = 0.0;
+                totalWeight = 0.0;
+                payment = 0.0;
+                change = 0.0;
+                currentInput = '';
+                numpadController.text = currentInput;
+              });
+              Navigator.of(context).pop(); // Close the dialog
+            },
+          ),
+        ],
+      );
+    },
+  );
+}
+
+ void _onButtonPressed() {
+  Navigator.push(
+    context,
+    MaterialPageRoute(builder: (context) => CashierDashboard()),
+  );
+}
+
+@override
+Widget build(BuildContext context) {
+  return Scaffold(
+   appBar: AppBar(
+  title: Text('Online Point of Sales System'),
+  automaticallyImplyLeading: false, // Prevents the back button from appearing
+  actions: <Widget>[
+    Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: SizedBox(
+        width: 200,
+        child: TextField(
+          decoration: InputDecoration(
+            labelText: 'Search',
+            border: OutlineInputBorder(),
+          ),
+          enabled: false, // Disable the search textbox
+        ),
+      ),
+    ),
+    IconButton(
+      icon: Icon(Icons.person),
+      onPressed: _onButtonPressed, // New button
+    ),
+    SizedBox(width: 16.0),
+  ],
+),
+
+    body: Container(
+>>>>>>> Stashed changes
       padding: EdgeInsets.all(8.0),
       color: Colors.grey[200],
       child: Row(
