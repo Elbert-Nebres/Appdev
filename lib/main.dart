@@ -3,76 +3,11 @@ import 'fruit_shop.dart';
 import 'vegetable_shop.dart';
 import 'canned_goods_shop.dart';
 import 'condiments_shop.dart';
-
+import 'product.dart';
 void main() {
   runApp(MyApp());
 }
-final Map<String, double> itemPrices = {
-'Mustard' : 20.0,
-'Datu Puti Soy Sauce Sachet' : 10.0,
-'Mang Tomas 1 Bottle' : 20.0,
-'Toyo Silver Swan 1 Liter' : 30.0,
-'UFC Banana Ketchup Sachet' : 15.0,
-'Cocomama Fresh Gata' : 25.0,
-'Datu Puti Vinegar Sachet' : 5.0,
-'Datu Puti Vinegar 1L' : 50.0,
-'Del Monte Filipino Style Tomato Sauce 90g' : 7.0,
-'Del Monte Filipino Style Tomato Sauce 250g' : 15.0,
-'Heinz Tomato Ketchup' : 25.0,
-'Jolly Kakang Gata' : 30.0,
-'Knorr Seasoning 250ml' : 12.0,
-'Knorr Seasoning 1L' : 40.0,
-'Maggi Savor Seasoning Calamansi' : 8.0,
-'Mamasita Menudo Afritada Mix' : 18.0,
-'Mamasita Oyster Sauce' : 22.0,
-'Mamasita Palabok Mix' : 25.0,
-'Mamasita Tocino Mix' : 18.0,
-'Ketchup': 20.0, 
-'Bokchoi': 25.00,
-'Inferior Sibuyas': 10.00,
-'Pipino': 18.00,
-'Repolyo Silly': 30.00,
-'Repolyo': 20.00,
-'Talong': 22.00,
-'Bellpeper Green': 28.00,
-'Red Bellpepper': 32.00,
-'Bellpepper': 26.00,
-'Carrot': 15.00,
-'Cauli Flower': 18.00,
-'Corn': 10.00,
-'Green Onion': 8.00,
-'Kalabasa': 16.00,
-'Mushroom': 24.00,
-'Okra': 14.00,
-'Patatas': 12.00,
-'Privelgedged Sibuyas': 10.00,
-'Orange': 20.00,
-'Apple': 20.00,
-'Banana': 20.00,
-'Strawberry': 20.00,
-'Abokado': 25.00,
-'Apol': 30.00,
-'Apricot': 40.00,
-'Peach': 15.00,
-'Cantaloupe': 18.00,
-'Dates': 22.00,
-'Demon': 50.00,
-'Istroberi': 28.00,
-'Kiwi': 35.00,
-'Lemon': 12.00,
-'Mango': 28.00,
-'Orinj': 30.00,
-'Papaya': 20.00,
-'Saba': 15.00,
-'Saging': 18.00,
-'Beans': 25.00,
-'Evaporated Milk': 28.00,
-'Corned Beef': 35.00,
-'Fruit Cocktail': 32.00,
-'Whole Corn Kernels': 27.00,
-'Mega Sardines (Chili)': 29.00,
-'Liver Spread': 26.00,
-};
+
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
