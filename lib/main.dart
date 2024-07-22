@@ -7,7 +7,72 @@ import 'condiments_shop.dart';
 void main() {
   runApp(MyApp());
 }
-
+final Map<String, double> itemPrices = {
+'Mustard' : 20.0,
+'Datu Puti Soy Sauce Sachet' : 10.0,
+'Mang Tomas 1 Bottle' : 20.0,
+'Toyo Silver Swan 1 Liter' : 30.0,
+'UFC Banana Ketchup Sachet' : 15.0,
+'Cocomama Fresh Gata' : 25.0,
+'Datu Puti Vinegar Sachet' : 5.0,
+'Datu Puti Vinegar 1L' : 50.0,
+'Del Monte Filipino Style Tomato Sauce 90g' : 7.0,
+'Del Monte Filipino Style Tomato Sauce 250g' : 15.0,
+'Heinz Tomato Ketchup' : 25.0,
+'Jolly Kakang Gata' : 30.0,
+'Knorr Seasoning 250ml' : 12.0,
+'Knorr Seasoning 1L' : 40.0,
+'Maggi Savor Seasoning Calamansi' : 8.0,
+'Mamasita Menudo Afritada Mix' : 18.0,
+'Mamasita Oyster Sauce' : 22.0,
+'Mamasita Palabok Mix' : 25.0,
+'Mamasita Tocino Mix' : 18.0,
+'Ketchup': 20.0, 
+'Bokchoi': 25.00,
+'Inferior Sibuyas': 10.00,
+'Pipino': 18.00,
+'Repolyo Silly': 30.00,
+'Repolyo': 20.00,
+'Talong': 22.00,
+'Bellpeper Green': 28.00,
+'Red Bellpepper': 32.00,
+'Bellpepper': 26.00,
+'Carrot': 15.00,
+'Cauli Flower': 18.00,
+'Corn': 10.00,
+'Green Onion': 8.00,
+'Kalabasa': 16.00,
+'Mushroom': 24.00,
+'Okra': 14.00,
+'Patatas': 12.00,
+'Privelgedged Sibuyas': 10.00,
+'Orange': 20.00,
+'Apple': 20.00,
+'Banana': 20.00,
+'Strawberry': 20.00,
+'Abokado': 25.00,
+'Apol': 30.00,
+'Apricot': 40.00,
+'Peach': 15.00,
+'Cantaloupe': 18.00,
+'Dates': 22.00,
+'Demon': 50.00,
+'Istroberi': 28.00,
+'Kiwi': 35.00,
+'Lemon': 12.00,
+'Mango': 28.00,
+'Orinj': 30.00,
+'Papaya': 20.00,
+'Saba': 15.00,
+'Saging': 18.00,
+'Beans': 25.00,
+'Evaporated Milk': 28.00,
+'Corned Beef': 35.00,
+'Fruit Cocktail': 32.00,
+'Whole Corn Kernels': 27.00,
+'Mega Sardines (Chili)': 29.00,
+'Liver Spread': 26.00,
+};
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -66,55 +131,74 @@ class _MyHomePageState extends State<MyHomePage> {
       selectedCategory = 'Condiments';
     });
   }
+void addWeightToTotal(double weight, String itemName) {
+  setState(() {
+    double pricePerUnit = itemPrices[itemName] ?? 0.0;
+    if (weight <= 0) return; // Skip invalid weights
+    double currentWeight = cartItems[itemName] ?? 0.0;
+    double previousTotal = total;
+    
+    // Update cart items with new weight
+    cartItems[itemName] = currentWeight + weight;
+    
+    // Update total weight and total cost
+    totalWeight += weight;
+    total += pricePerUnit * weight; 
 
-  void addWeightToTotal(double weight, String itemName) {
-    setState(() {
-      cartItems[itemName] = weight.toDouble();
-      totalWeight += weight;
-      total += 20.0 * weight; // Adjust price logic if needed
-      itemToDelete = itemName; // Set itemToDelete to the last added item
-    });
-  }
-
+    // Debugging
+    print('Item: $itemName');
+    print('Price per unit: $pricePerUnit');
+    print('Weight added: $weight');
+    print('New Total Weight: $totalWeight');
+    print('Previous Total: $previousTotal');
+    print('New Total: $total');
+  });
+}
   void addToCart(String item) {
-    setState(() {
-      cartItems[item] = (cartItems[item] ?? 0) + 1;
-      total += 20.0; // Adjust based on your item's price logic
-      itemToDelete = item; // Set itemToDelete to the last added item
-    });
-  }
+  setState(() {
+    double pricePerUnit = itemPrices[item] ?? 0.0;
+    cartItems[item] = (cartItems[item] ?? 0) + 1;
+    total += pricePerUnit; // Use the price of the item
+    itemToDelete = item; // Set itemToDelete to the last added item
+  });
+}
+void removeFromCart(String item) {
+  setState(() {
+    if (cartItems.containsKey(item)) {
+      double weight = cartItems[item]!;
+      double pricePerUnit = itemPrices[item] ?? 0.0;
+      double previousTotal = total;
+      
+      // Update total and weight
+      total -= pricePerUnit * weight;
+      totalWeight -= weight;
+      cartItems.remove(item); // Remove the item from the cart
 
-  void removeFromCart(String item) {
-    setState(() {
-      if (cartItems[item] != null && cartItems[item]! > 0) {
-        total -= 20.0; // Adjust based on your item's price logic
-        cartItems[item] = cartItems[item]! - 1;
-        if (cartItems[item] == 0) {
-          cartItems.remove(item);
-        }
-      }
-    });
-  }
-
+      // Debugging
+      print('Item Removed: $item');
+      print('Price per unit: $pricePerUnit');
+      print('Weight removed: $weight');
+      print('New Total Weight: $totalWeight');
+      print('Previous Total: $previousTotal');
+      print('New Total: $total');
+    }
+  });
+}
   void handleNumpadInput(String input) {
     setState(() {
-      if (input == 'DEL' || input == 'Delete') {
-        if (currentInput.isNotEmpty) {
-          currentInput = currentInput.substring(0, currentInput.length - 1);
-          numpadController.text = currentInput;
-        }
-        if (itemToDelete != null) {
-          removeFromCart(itemToDelete!);
-          itemToDelete = null; // Clear the item to delete
-        }
-        // Reset payment amount and current input
+      if (input == 'Delete') {
+        // Clear the cart and reset total and other related variables
+        cartItems.clear();
+        total = 0.0;
+        totalWeight = 0.0;
         payment = 0.0;
+        change = 0.0;
         currentInput = '';
         numpadController.text = currentInput;
       } else if (input == 'Enter') {
         payment = double.tryParse(currentInput) ?? 0.0;
         change = payment - total;
-      } else if (input == '✓') {
+      } else if (input == 'Cash') {
         payment = double.tryParse(currentInput) ?? 0.0;
         change = payment - total;
         showDialog(
@@ -134,13 +218,44 @@ class _MyHomePageState extends State<MyHomePage> {
             );
           },
         );
+      } else if (input == 'G-cash') {
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: Text('G-Cash Payment'),
+              content: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  SizedBox(
+                    width: 400, // Adjust the width as needed
+                    height: 350, // Adjust the height as needed
+                    child: Image.asset('assets/gcash.JFIF'), // Adjust path if needed
+                  ),
+                  SizedBox(height: 16.0),
+                  Text(
+                    'Total: Php ${total.toStringAsFixed(2)}',
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  ),
+                ],
+              ),
+              actions: <Widget>[
+                TextButton(
+                  child: Text('OK'),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                ),
+              ],
+            );
+          },
+        );
       } else {
         currentInput += input;
         numpadController.text = currentInput;
       }
     });
   }
-
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -195,6 +310,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         totalWeight: totalWeight,
                         payment: payment,
                         change: change,
+                        removeFromCart: removeFromCart, // Pass the removeFromCart function
                       ),
                     ),
                   ),
@@ -216,10 +332,10 @@ class _MyHomePageState extends State<MyHomePage> {
                                 padding: const EdgeInsets.all(16.0),
                                 child: Text(
                                   'Current Input: $currentInput',
-                                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                                 ),
                               ),
-                              _buildKeypadAndActions(),
+                              _buildKeypadAndActions(), // Ensure this is defined
                             ],
                           ),
                         ),
@@ -249,12 +365,12 @@ class _MyHomePageState extends State<MyHomePage> {
       case 'Fruit':
         return FruitShop(
           cartItems: cartItems,
-          addWeightToTotal: addWeightToTotal,
+          addWeightToTotal: addWeightToTotal, // Matches the signature
         );
       case 'Vegetable':
         return VegetableShop(
           cartItems: cartItems,
-          addWeightToTotal: addWeightToTotal,
+          addWeightToTotal: addWeightToTotal, // Matches the signature
         );
       case 'Canned Goods':
         return CannedGoodsShop(
@@ -294,42 +410,64 @@ class _MyHomePageState extends State<MyHomePage> {
     return Column(
       children: <Widget>[
         _buildKeypadRow(['7', '8', '9']),
-        SizedBox(height: 8.0),
+        SizedBox(height: 4.0), // Reduced size
         _buildKeypadRow(['4', '5', '6']),
-        SizedBox(height: 8.0),
+        SizedBox(height: 4.0), // Reduced size
         _buildKeypadRow(['1', '2', '3']),
-        SizedBox(height: 8.0),
+        SizedBox(height: 4.0), // Reduced size
         _buildKeypadRow(['0', '00', '.']),
-        SizedBox(height: 8.0),
-        _buildKeypadRow(['DEL', 'Enter']),
-        SizedBox(height: 8.0),
-        _buildActionRow(['✓', '✗'], [Colors.green, Colors.red]),
-        SizedBox(height: 8.0),
-        _buildActionRow([ 'Delete']),
+        SizedBox(height: 4.0), // Reduced size
+        _buildKeypadRow(['Delete', 'Enter']),
+        SizedBox(height: 4.0), // Reduced size
+        _buildActionRow(['Cash', 'G-cash'], [Colors.green, Colors.red]),
       ],
     );
   }
 
-  Widget _buildKeypadRow(List<String> labels) {
+  Widget _buildKeypadRow(List<String> keys) {
     return Row(
-      children: labels.map((label) => Expanded(
-        child: KeypadButton(
-          label: label,
-          onPressed: () => handleNumpadInput(label),
-        ),
-      )).toList(),
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: keys.map((key) {
+        return Expanded(
+          child: Padding(
+            padding: const EdgeInsets.all(2.0), // Reduced padding
+            child: ElevatedButton(
+              onPressed: () => handleNumpadInput(key),
+              child: Text(key, style: TextStyle(fontSize: 16)), // Reduced font size
+              style: ElevatedButton.styleFrom(
+                padding: EdgeInsets.symmetric(vertical: 12.0), // Reduced padding
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(6.0)), // Reduced radius
+                ),
+              ),
+            ),
+          ),
+        );
+      }).toList(),
     );
   }
 
-  Widget _buildActionRow(List<String> labels, [List<Color?> colors = const [null, null]]) {
+  Widget _buildActionRow(List<String> actions, [List<Color>? colors]) {
     return Row(
-      children: List.generate(labels.length, (index) => Expanded(
-        child: ActionButton(
-          label: labels[index],
-          color: colors[index],
-          onPressed: () => handleNumpadInput(labels[index]),
-        ),
-      )),
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: List.generate(actions.length, (index) {
+        return Expanded(
+          child: Padding(
+            padding: const EdgeInsets.all(2.0), // Reduced padding
+            child: ElevatedButton(
+              onPressed: () => handleNumpadInput(actions[index]),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: colors?[index] ?? Colors.blue, // Button color
+                padding: EdgeInsets.symmetric(vertical: 12.0), // Reduced padding
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(6.0)), // Reduced radius
+                ),
+              ),
+              child: Text(actions[index], style: TextStyle(fontSize: 16)), // Reduced font size
+            ),
+          ),
+        );
+      }),
     );
   }
 }
@@ -372,7 +510,7 @@ class ActionButton extends StatelessWidget {
       style: ElevatedButton.styleFrom(
         backgroundColor: color ?? Colors.grey[200], // Background color
         foregroundColor: Colors.black, // Text color
-        shape: RoundedRectangleBorder(
+        shape: ContinuousRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(8.0)),
         ),
         elevation: 2,
@@ -387,6 +525,7 @@ class CartDisplay extends StatelessWidget {
   final double totalWeight;
   final double payment;
   final double change;
+  final void Function(String) removeFromCart; // Function to remove items from cart
 
   CartDisplay({
     required this.cartItems,
@@ -394,6 +533,7 @@ class CartDisplay extends StatelessWidget {
     required this.totalWeight,
     required this.payment,
     required this.change,
+    required this.removeFromCart, // Initialize the removeFromCart function
   });
 
   @override
@@ -411,7 +551,16 @@ class CartDisplay extends StatelessWidget {
 
               return ListTile(
                 title: Text(item),
-                trailing: Text('${weight.toStringAsFixed(2)} '),
+                trailing: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text('${weight.toStringAsFixed(2)}'),
+                    IconButton(
+                      icon: Icon(Icons.delete, color: Colors.red),
+                      onPressed: () => removeFromCart(item), // Call remove function
+                    ),
+                  ],
+                ),
               );
             },
           ),

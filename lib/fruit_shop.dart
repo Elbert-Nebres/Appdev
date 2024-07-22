@@ -2,12 +2,10 @@ import 'package:flutter/material.dart';
 
 class FruitShop extends StatelessWidget {
   final Map<String, double> cartItems;
-  final Function(double, String) addWeightToTotal;
+  final void Function(double, String) addWeightToTotal; // Update to match signature
 
-  FruitShop({
-    required this.cartItems,
-    required this.addWeightToTotal,
-  });
+  FruitShop({required this.cartItems, required this.addWeightToTotal});
+
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +24,7 @@ class FruitShop extends StatelessWidget {
           image: 'assets/apple.jpg',
           addWeightToTotal: addWeightToTotal,
         ),
-        FruitCard(
+            FruitCard(
           title: 'Banana',
           pricePerKg: 20.0,
           image: 'assets/banana.jpg',
@@ -39,97 +37,95 @@ class FruitShop extends StatelessWidget {
           addWeightToTotal: addWeightToTotal,
         ),
         FruitCard(
-  title: 'Abokado',
-  pricePerKg: 25.0,
-  image: 'assets/abokado.png',
-  addWeightToTotal: addWeightToTotal,
-),
-FruitCard(
-  title: 'Apol',
-  pricePerKg: 30.0,
-  image: 'assets/apol.webp',
-  addWeightToTotal: addWeightToTotal,
-),
-FruitCard(
-  title: 'Apricot',
-  pricePerKg: 40.0,
-  image: 'assets/Apricot.png',
-  addWeightToTotal: addWeightToTotal,
-),
-FruitCard(
-  title: 'Peach',
-  pricePerKg: 15.0,
-  image: 'assets/bitch.png',
-  addWeightToTotal: addWeightToTotal,
-),
-FruitCard(
-  title: 'Cantaloupe',
-  pricePerKg: 18.0,
-  image: 'assets/cantaloupe.png',
-  addWeightToTotal: addWeightToTotal,
-),
-FruitCard(
-  title: 'Dates',
-  pricePerKg: 22.0,
-  image: 'assets/Dates.png',
-  addWeightToTotal: addWeightToTotal,
-),
-FruitCard(
-  title: 'Demon',
-  pricePerKg: 50.0,
-  image: 'assets/demon.png',
-  addWeightToTotal: addWeightToTotal,
-),
-FruitCard(
-  title: 'Istroberi',
-  pricePerKg: 28.0,
-  image: 'assets/istroberi.webp',
-  addWeightToTotal: addWeightToTotal,
-),
-FruitCard(
-  title: 'Kiwi',
-  pricePerKg: 35.0,
-  image: 'assets/kiwi.jpg',
-  addWeightToTotal: addWeightToTotal,
-),
-FruitCard(
-  title: 'Lemon',
-  pricePerKg: 12.0,
-  image: 'assets/lemon.webp',
-  addWeightToTotal: addWeightToTotal,
-),
-FruitCard(
-  title: 'Mango',
-  pricePerKg: 28.0,
-  image: 'assets/mango.webp',
-  addWeightToTotal: addWeightToTotal,
-),
-FruitCard(
-  title: 'Orinj',
-  pricePerKg: 30.0,
-  image: 'assets/orinj.png',
-  addWeightToTotal: addWeightToTotal,
-),
-FruitCard(
-  title: 'Papaya',
-  pricePerKg: 20.0,
-  image: 'assets/papaya.webp',
-  addWeightToTotal: addWeightToTotal,
-),
-FruitCard(
-  title: 'Saba',
-  pricePerKg: 15.0,
-  image: 'assets/saba.jpg',
-  addWeightToTotal: addWeightToTotal,
-),
-FruitCard(
-  title: 'Saging',
-  pricePerKg: 18.0,
-  image: 'assets/saging.png',
-  addWeightToTotal: addWeightToTotal,
-),
-
-
+          title: 'Abokado',
+          pricePerKg: 25.0,
+          image: 'assets/abokado.png',
+          addWeightToTotal: addWeightToTotal,
+        ),
+        FruitCard(
+          title: 'Apol',
+          pricePerKg: 30.0,
+          image: 'assets/apol.webp',
+          addWeightToTotal: addWeightToTotal,
+        ),
+        FruitCard(
+          title: 'Apricot',
+          pricePerKg: 40.0,
+          image: 'assets/Apricot.png',
+          addWeightToTotal: addWeightToTotal,
+        ),
+        FruitCard(
+          title: 'Peach',
+          pricePerKg: 15.0,
+          image: 'assets/peach.png',
+          addWeightToTotal: addWeightToTotal,
+        ),
+        FruitCard(
+          title: 'Cantaloupe',
+          pricePerKg: 18.0,
+          image: 'assets/cantaloupe.png',
+          addWeightToTotal: addWeightToTotal,
+        ),
+        FruitCard(
+          title: 'Dates',
+          pricePerKg: 22.0,
+          image: 'assets/Dates.png',
+          addWeightToTotal: addWeightToTotal,
+        ),
+        FruitCard(
+          title: 'Demon',
+          pricePerKg: 50.0,
+          image: 'assets/demon.png',
+          addWeightToTotal: addWeightToTotal,
+        ),
+        FruitCard(
+          title: 'Istroberi',
+          pricePerKg: 28.0,
+          image: 'assets/istroberi.webp',
+          addWeightToTotal: addWeightToTotal,
+        ),
+        FruitCard(
+          title: 'Kiwi',
+          pricePerKg: 35.0,
+          image: 'assets/kiwi.jpg',
+          addWeightToTotal: addWeightToTotal,
+        ),
+        FruitCard(
+          title: 'Lemon',
+          pricePerKg: 12.0,
+          image: 'assets/lemon.webp',
+          addWeightToTotal: addWeightToTotal,
+        ),
+        FruitCard(
+          title: 'Mango',
+          pricePerKg: 28.0,
+          image: 'assets/mango.webp',
+          addWeightToTotal: addWeightToTotal,
+        ),
+        FruitCard(
+          title: 'Orinj',
+          pricePerKg: 30.0,
+          image: 'assets/orinj.png',
+          addWeightToTotal: addWeightToTotal,
+        ),
+        FruitCard(
+          title: 'Papaya',
+          pricePerKg: 20.0,
+          image: 'assets/papaya.webp',
+          addWeightToTotal: addWeightToTotal,
+        ),
+        FruitCard(
+          title: 'Saba',
+          pricePerKg: 15.0,
+          image: 'assets/saba.jpg',
+          addWeightToTotal: addWeightToTotal,
+        ),
+        FruitCard(
+          title: 'Saging',
+          pricePerKg: 18.0,
+          image: 'assets/saging.png',
+          addWeightToTotal: addWeightToTotal,
+        ),
       ],
     );
   }
@@ -139,7 +135,7 @@ class FruitCard extends StatelessWidget {
   final String title;
   final double pricePerKg;
   final String image;
-  final Function(double, String) addWeightToTotal;
+  final void Function(double, String) addWeightToTotal; // Update signature to match
 
   FruitCard({
     required this.title,
@@ -154,7 +150,7 @@ class FruitCard extends StatelessWidget {
       builder: (BuildContext context) {
         return WeightEntryPopup(
           onWeightEntered: (double weight) {
-            addWeightToTotal(weight, title);
+            addWeightToTotal(weight, title); // Pass only weight and title
           },
         );
       },
@@ -183,8 +179,9 @@ class FruitCard extends StatelessWidget {
   }
 }
 
+
 class WeightEntryPopup extends StatefulWidget {
-  final Function(double) onWeightEntered;
+  final void Function(double weight) onWeightEntered;
 
   WeightEntryPopup({required this.onWeightEntered});
 
@@ -207,23 +204,23 @@ class _WeightEntryPopupState extends State<WeightEntryPopup> {
       padding: EdgeInsets.all(16.0),
       child: Column(
         mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
+          Text('Enter Weight in kg'),
           TextField(
             controller: _weightController,
             keyboardType: TextInputType.numberWithOptions(decimal: true),
             decoration: InputDecoration(
-              labelText: 'Enter Weight (kg)',
+              hintText: 'e.g. 1.5',
             ),
           ),
           SizedBox(height: 16.0),
           ElevatedButton(
+            child: Text('Add'),
             onPressed: () {
-              double weight = double.tryParse(_weightController.text) ?? 0.0;
+              double weight = double.tryParse(_weightController.text) ?? 0;
               widget.onWeightEntered(weight);
-              Navigator.of(context).pop();
+              Navigator.pop(context);
             },
-            child: Text('Add to Total'),
           ),
         ],
       ),
