@@ -30,9 +30,8 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-
-  # The following adds the Cupertino Icons font to your application.
-  # Use with the CupertinoIcons class for iOS style icons.
+  intl: ^0.17.0
+  charts_flutter: ^0.12.0
   cupertino_icons: ^1.0.6
 
 dev_dependencies:
@@ -74,14 +73,12 @@ flutter:
     - assets/silly.png
     - assets/repolyo.png
     - assets/talong.png
-    - assets/tomato.png
     - assets/bellpeper_green.png
     - assets/bellpepper_red.png
     - assets/bellpepper.png
     - assets/brocoli.png
     - assets/carrot.png
     - assets/cauli_flower.png
-    - assets/corn.png
     - assets/green_onion.png
     - assets/kalabasa.png
     - assets/mushroom.png
@@ -137,25 +134,8 @@ flutter:
     - assets/maling_meatloaf.png
     - assets/mega_sardines_tomato_sauce.png
     - assets/san_marino_corned_tuna_180g.png
-    - assets/alaska_evaporada.webp
-    - assets/Argentina_corned_beef.png
-    - assets/delmonte_fruit_and_cocktail_83g.png
-    - assets/jolly_whole_corn_kernels.webp
-    - assets/Mega_sardines_chili.webp
-    - assets/reno_liver_spread_230g.png
-    - assets/alaska_condensada.webp
-    - assets/argentina_meatlaof.png
-    - assets/delmonte_pineapple_tidbits.png
-    - assets/Jolly_cream_corn_sweet_425g.webp
-    - assets/Jolly_Mushroom_pieces_and_stem_156g.jpg
-    - assets/Libby_Vienna_Sausage.webp
-    - assets/maling_meatloaf.png
-    - assets/mega_sardines_tomato_sauce.png
-    - assets/san_marino_corned_tuna_180g.png
     - assets/background.webp
-    
     - assets/gcash.JFIF
-
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
