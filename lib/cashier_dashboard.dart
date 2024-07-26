@@ -36,7 +36,7 @@ class CashierDashboard extends StatelessWidget {
             child: Text(
               DateFormat('MMM d, yyyy').format(DateTime.now()),
               style: TextStyle(
-                color: Colors.blue,
+                color: Colors.white,
                 fontSize: 14,
               ),
             ),

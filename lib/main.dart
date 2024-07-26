@@ -18,14 +18,13 @@ class MyApp extends StatelessWidget {
       title: 'Online Point of Sales System',
       initialRoute: '/login',
       routes: {
-        '/login': (context) => LoginPage(), // Route for LoginPage
-        '/home': (context) => MyHomePage(), // Route for Product Page
-        '/cashier_dashboard': (context) => CashierDashboard(), // Route for CashierDashboard
+        '/login': (context) => LoginPage(),
+        '/home': (context) => MyHomePage(),
+        '/cashier_dashboard': (context) => CashierDashboard(),
       },
     );
   }
 }
-
 
 class MyHomePage extends StatefulWidget {
   @override
@@ -42,7 +41,7 @@ class _MyHomePageState extends State<MyHomePage> {
   double change = 0.0;
   bool isNumpadVisible = false;
   String currentInput = '';
-  String? itemToDelete; // Track the item currently selected for deletion
+  String? itemToDelete;
 
   void showFruitShop() {
     setState(() {
@@ -67,100 +66,98 @@ class _MyHomePageState extends State<MyHomePage> {
       selectedCategory = 'Condiments';
     });
   }
-void _showDeleteConfirmationDialog() {
-  showDialog(
-    context: context,
-    builder: (BuildContext context) {
-      return AlertDialog(
-        title: Text('Delete Item'),
-        content: Text('Are you sure you want to delete this item from the cart?'),
-        actions: <Widget>[
-          TextButton(
-            child: Text('Cancel'),
-            onPressed: () {
-              Navigator.of(context).pop(); // Close the dialog
-            },
-          ),
-          TextButton(
-            child: Text('Delete'),
-            onPressed: () {
-              if (itemToDelete != null) {
-                // Clear all items from the cart
-                setState(() {
-                  cartItems.clear(); // Clear the cart
-                  total = 0.0; // Reset total
-                  totalWeight = 0.0; // Reset total weight
-                  payment = 0.0; // Reset payment
-                  change = 0.0; // Reset change
-                  currentInput = ''; // Clear current input
-                  numpadController.text = currentInput; // Update numpadController
-                  itemToDelete = null; // Reset itemToDelete
-                });
-              }
-              Navigator.of(context).pop(); // Close the dialog
-            },
-          ),
-        ],
-      );
-    },
-  );
+
+  void _showDeleteConfirmationDialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Delete Item'),
+          content:
+              Text('Are you sure you want to delete this item from the cart?'),
+          actions: <Widget>[
+            TextButton(
+              child: Text('Cancel'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              child: Text('Delete'),
+              onPressed: () {
+                if (itemToDelete != null) {
+                  setState(() {
+                    cartItems.clear();
+                    total = 0.0;
+                    totalWeight = 0.0;
+                    payment = 0.0;
+                    change = 0.0;
+                    currentInput = '';
+                    numpadController.text = currentInput;
+                    itemToDelete = null;
+                  });
+                }
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+void addWeightToTotal(double weight, String itemName) {
+  setState(() {
+    double pricePerUnit = itemPrices[itemName] ?? 0.0;
+    if (weight <= 0) return;
+    double currentWeight = cartItems[itemName] ?? 0.0;
+    double previousTotal = total;
+
+    cartItems[itemName] = currentWeight + weight;
+
+    totalWeight += weight;
+    total += pricePerUnit * weight;
+
+    print('Item: $itemName');
+    print('Price per unit: $pricePerUnit');
+    print('Weight added: $weight');
+    print('New Total Weight: $totalWeight');
+    print('Previous Total: $previousTotal');
+    print('New Total: $total');
+  });
 }
 
-  void addWeightToTotal(double weight, String itemName) {
-    setState(() {
-      double pricePerUnit = itemPrices[itemName] ?? 0.0;
-      if (weight <= 0) return; // Skip invalid weights
-      double currentWeight = cartItems[itemName] ?? 0.0;
+void addToCart(String item) {
+  setState(() {
+    double pricePerUnit = itemPrices[item] ?? 0.0;
+    cartItems[item] = (cartItems[item] ?? 0) + 1;
+    total += pricePerUnit;
+    itemToDelete = item;
+  });
+}
+
+
+void removeFromCart(String item) {
+  setState(() {
+    if (cartItems.containsKey(item)) {
+      double weight = cartItems[item]!;
+      double pricePerUnit = itemPrices[item] ?? 0.0;
       double previousTotal = total;
 
-      // Update cart items with new weight
-      cartItems[itemName] = currentWeight + weight;
+      total -= pricePerUnit * weight;
+      totalWeight -= weight;
+      cartItems.remove(item);
 
-      // Update total weight and total cost
-      totalWeight += weight;
-      total += pricePerUnit * weight; 
-
-      // Debugging
-      print('Item: $itemName');
+      print('Item Removed: $item');
       print('Price per unit: $pricePerUnit');
-      print('Weight added: $weight');
+      print('Weight removed: $weight');
       print('New Total Weight: $totalWeight');
       print('Previous Total: $previousTotal');
       print('New Total: $total');
-    });
-  }
+    }
+  });
+}
 
-  void addToCart(String item) {
-    setState(() {
-      double pricePerUnit = itemPrices[item] ?? 0.0;
-      cartItems[item] = (cartItems[item] ?? 0) + 1;
-      total += pricePerUnit; // Use the price of the item
-      itemToDelete = item; // Set itemToDelete to the last added item
-    });
-  }
-
-  void removeFromCart(String item) {
-    setState(() {
-      if (cartItems.containsKey(item)) {
-        double weight = cartItems[item]!;
-        double pricePerUnit = itemPrices[item] ?? 0.0;
-        double previousTotal = total;
-
-        // Update total and weight
-        total -= pricePerUnit * weight;
-        totalWeight -= weight;
-        cartItems.remove(item); // Remove the item from the cart
-
-        // Debugging
-        print('Item Removed: $item');
-        print('Price per unit: $pricePerUnit');
-        print('Weight removed: $weight');
-        print('New Total Weight: $totalWeight');
-        print('Previous Total: $previousTotal');
-        print('New Total: $total');
-      }
-    });
-  }
 
 void handleNumpadInput(String input) {
   setState(() {
@@ -179,6 +176,7 @@ void handleNumpadInput(String input) {
             title: Text('Cash Payment'),
             content: Column(
               mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
                   'Total: Php ${total.toStringAsFixed(2)}',
@@ -192,6 +190,8 @@ void handleNumpadInput(String input) {
                   'Change: Php ${change.toStringAsFixed(2)}',
                   style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                 ),
+                SizedBox(height: 16.0),
+                _buildCartItemsList(), // Add this line
               ],
             ),
             actions: <Widget>[
@@ -199,7 +199,6 @@ void handleNumpadInput(String input) {
                 child: Text('OK'),
                 onPressed: () {
                   setState(() {
-                    // Clear all products and reset values
                     cartItems.clear();
                     total = 0.0;
                     totalWeight = 0.0;
@@ -225,15 +224,17 @@ void handleNumpadInput(String input) {
               mainAxisSize: MainAxisSize.min,
               children: [
                 SizedBox(
-                  width: 400, // Adjust the width as needed
-                  height: 350, // Adjust the height as needed
-                  child: Image.asset('assets/gcash.JFIF'), // Adjust path if needed
+                  width: 400,
+                  height: 350,
+                  child: Image.asset('assets/gcash.JFIF'),
                 ),
                 SizedBox(height: 16.0),
                 Text(
                   'Total: Php ${total.toStringAsFixed(2)}',
                   style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                 ),
+                SizedBox(height: 16.0),
+                _buildCartItemsList(), // Add this line
               ],
             ),
             actions: <Widget>[
@@ -241,7 +242,6 @@ void handleNumpadInput(String input) {
                 child: Text('OK'),
                 onPressed: () {
                   setState(() {
-                    // Clear all products and reset values
                     cartItems.clear();
                     total = 0.0;
                     totalWeight = 0.0;
@@ -259,7 +259,7 @@ void handleNumpadInput(String input) {
       );
     } else if (input == '<=') {
       if (currentInput.isNotEmpty) {
-        currentInput = currentInput.substring(0, currentInput.length - 1); // Remove last character
+        currentInput = currentInput.substring(0, currentInput.length - 1);
         numpadController.text = currentInput;
       }
     } else {
@@ -269,61 +269,81 @@ void handleNumpadInput(String input) {
   });
 }
 
+Widget _buildCartItemsList() {
+  return Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: cartItems.entries.map((entry) {
+      // Calculate variables first
+      String itemName = entry.key;
+      double weight = entry.value;
+      double pricePerUnit = itemPrices[itemName] ?? 0.0;
+      double totalValue = pricePerUnit * weight;
 
- void _onButtonPressed() {
-  Navigator.push(
-    context,
-    MaterialPageRoute(builder: (context) => CashierDashboard()),
+      // Format the string for display
+      String displayText = '$itemName - Qty: ${weight.toStringAsFixed(2)} kg, Value: Php ${totalValue.toStringAsFixed(2)}';
+
+      return Text(
+        displayText,
+        style: TextStyle(fontSize: 16),
+      );
+    }).toList(),
   );
 }
 
-@override
-Widget build(BuildContext context) {
-  return Scaffold(
-    appBar: AppBar(
-      automaticallyImplyLeading: false, // Remove the back button
-      title: Text('Online Point of Sales System'),
-      actions: <Widget>[
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: SizedBox(
-            width: 200,
-            child: TextField(
-              decoration: InputDecoration(
-                labelText: 'Search',
-                border: OutlineInputBorder(),
+  void _onButtonPressed() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => CashierDashboard()),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        automaticallyImplyLeading: false,
+        title: Text('Online Point of Sales System'),
+        actions: <Widget>[
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: SizedBox(
+              width: 200,
+              child: TextField(
+                decoration: InputDecoration(
+                  labelText: 'Search',
+                  border: OutlineInputBorder(),
+                ),
+                enabled: false,
               ),
-              enabled: false, // Disable the search textbox
             ),
           ),
-        ),
-        IconButton(
-          icon: Icon(Icons.person),
-          onPressed: _onButtonPressed, // New button
-        ),
-        SizedBox(width: 16.0),
-      ],
-    ),
-    body: Container(
-      padding: EdgeInsets.all(8.0),
-      color: Colors.grey[200],
-      child: Row(
-        children: <Widget>[
-          // Left side with categories and large display area
-          Expanded(
-            child: Column(
-              children: <Widget>[
-                Expanded(
-                  child: Container(
-                    color: Colors.white,
-                    margin: EdgeInsets.all(8.0),
-                    padding: EdgeInsets.all(8.0),
-                    child: Card(
-                      elevation: 4,
-                      child: _getShopWidget(),
+          IconButton(
+            icon: Icon(Icons.person),
+            onPressed: _onButtonPressed,
+          ),
+          SizedBox(width: 16.0),
+        ],
+      ),
+      body: Container(
+        padding: EdgeInsets.all(8.0),
+        color: Colors.grey[200],
+        child: Row(
+          children: <Widget>[
+            Expanded(
+              child: Column(
+                children: <Widget>[
+                  Expanded(
+                    child: Container(
+                      color: Colors.white,
+                      margin: EdgeInsets.all(8.0),
+                      padding: EdgeInsets.all(8.0),
+                      child: Card(
+                        elevation: 4,
+                        child: _getShopWidget(),
+                      ),
                     ),
                   ),
-                ),
+                 
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: <Widget>[
@@ -379,7 +399,7 @@ Widget build(BuildContext context) {
                                 padding: const EdgeInsets.all(16.0),
                                 child: Text(
                                   'Current Input: $currentInput',
-                                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                                  style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold,),
                                 ),
                               ),
                               _buildKeypadAndActions(), // Ensure this is defined
@@ -469,33 +489,37 @@ Widget build(BuildContext context) {
         SizedBox(height: 4.0), // Reduced size
         _buildKeypadRow(['Delete', 'Enter']),
         SizedBox(height: 4.0), // Reduced size
-        _buildActionRow(['Cash', 'G-cash'], [Colors.green, Colors.red]),
+        _buildActionRow(['Cash', 'G-cash'], [Colors.white, Colors.white]),
       ],
     );
   }
 
-  Widget _buildKeypadRow(List<String> keys) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      children: keys.map((key) {
-        return Expanded(
-          child: Padding(
-            padding: const EdgeInsets.all(2.0), // Reduced padding
-            child: ElevatedButton(
-              onPressed: () => handleNumpadInput(key),
-              child: Text(key, style: TextStyle(fontSize: 16)), // Reduced font size
-              style: ElevatedButton.styleFrom(
-                padding: EdgeInsets.symmetric(vertical: 12.0), // Reduced padding
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(6.0)), // Reduced radius
-                ),
-              ),
+ Widget _buildKeypadRow(List<String> keys) {
+  return Row(
+    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+    children: keys.map((key) {
+      return Expanded(
+        child: Padding(
+          padding: const EdgeInsets.all(2.0), // Reduced padding
+          child: ElevatedButton(
+            onPressed: () => handleNumpadInput(key),
+            child: Text(
+              key,
+              style: TextStyle(fontSize: 16, color: Colors.black), // Font color
+            ),
+            style: ElevatedButton.styleFrom(
+              padding: EdgeInsets.symmetric(vertical: 12.0), backgroundColor: Colors.white, // Reduced padding
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(6.0)), // Reduced radius
+              ), // Background color
             ),
           ),
-        );
-      }).toList(),
-    );
-  }
+        ),
+      );
+    }).toList(),
+  );
+}
+
 
   Widget _buildActionRow(List<String> actions, [List<Color>? colors]) {
     return Row(
@@ -507,13 +531,13 @@ Widget build(BuildContext context) {
             child: ElevatedButton(
               onPressed: () => handleNumpadInput(actions[index]),
               style: ElevatedButton.styleFrom(
-                backgroundColor: colors?[index] ?? Colors.blue, // Button color
+                backgroundColor: colors?[index] ?? Colors.black, // Button color
                 padding: EdgeInsets.symmetric(vertical: 12.0), // Reduced padding
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.all(Radius.circular(6.0)), // Reduced radius
                 ),
               ),
-              child: Text(actions[index], style: TextStyle(fontSize: 16)), // Reduced font size
+              child: Text(actions[index], style: TextStyle(fontSize: 16,color: Colors.black)), // Reduced font size
             ),
           ),
         );
@@ -534,7 +558,7 @@ class KeypadButton extends StatelessWidget {
       onPressed: onPressed,
       child: Text(label),
       style: ElevatedButton.styleFrom(
-        backgroundColor: Colors.grey[200], // Background color
+        backgroundColor: const Color.fromARGB(255, 238, 238, 238), // Background color
         foregroundColor: Colors.black, // Text color
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(8.0)),
