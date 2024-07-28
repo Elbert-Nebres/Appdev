@@ -174,25 +174,27 @@ void handleNumpadInput(String input) {
         builder: (BuildContext context) {
           return AlertDialog(
             title: Text('Cash Payment'),
-            content: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'Total: Php ${total.toStringAsFixed(2)}',
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                ),
-                Text(
-                  'Payment: Php ${payment.toStringAsFixed(2)}',
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                ),
-                Text(
-                  'Change: Php ${change.toStringAsFixed(2)}',
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                ),
-                SizedBox(height: 16.0),
-                _buildCartItemsList(), // Add this line
-              ],
+            content: SingleChildScrollView( // Make content scrollable
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Total: Php ${total.toStringAsFixed(2)}',
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  ),
+                  Text(
+                    'Payment: Php ${payment.toStringAsFixed(2)}',
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  ),
+                  Text(
+                    'Change: Php ${change.toStringAsFixed(2)}',
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  ),
+                  SizedBox(height: 16.0),
+                  _buildCartItemsList(), // This should already be scrollable
+                ],
+              ),
             ),
             actions: <Widget>[
               TextButton(
@@ -220,22 +222,24 @@ void handleNumpadInput(String input) {
         builder: (BuildContext context) {
           return AlertDialog(
             title: Text('G-Cash Payment'),
-            content: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                SizedBox(
-                  width: 400,
-                  height: 350,
-                  child: Image.asset('assets/gcash.JFIF'),
-                ),
-                SizedBox(height: 16.0),
-                Text(
-                  'Total: Php ${total.toStringAsFixed(2)}',
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                ),
-                SizedBox(height: 16.0),
-                _buildCartItemsList(), // Add this line
-              ],
+            content: SingleChildScrollView( // Make content scrollable
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  SizedBox(
+                    width: 400,
+                    height: 350,
+                    child: Image.asset('assets/gcash.JFIF'),
+                  ),
+                  SizedBox(height: 16.0),
+                  Text(
+                    'Total: Php ${total.toStringAsFixed(2)}',
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  ),
+                  SizedBox(height: 16.0),
+                  _buildCartItemsList(), // This should already be scrollable
+                ],
+              ),
             ),
             actions: <Widget>[
               TextButton(
@@ -269,26 +273,35 @@ void handleNumpadInput(String input) {
   });
 }
 
+
 Widget _buildCartItemsList() {
-  return Column(
-    crossAxisAlignment: CrossAxisAlignment.start,
-    children: cartItems.entries.map((entry) {
-      // Calculate variables first
-      String itemName = entry.key;
-      double weight = entry.value;
-      double pricePerUnit = itemPrices[itemName] ?? 0.0;
-      double totalValue = pricePerUnit * weight;
+  return Container(
+    height: 200.0, // Set a fixed height for the scrollable area
+    child: SingleChildScrollView(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: cartItems.entries.map((entry) {
+          String itemName = entry.key;
+          double weight = entry.value;
+          double pricePerUnit = itemPrices[itemName] ?? 0.0;
+          double totalValue = pricePerUnit * weight;
 
-      // Format the string for display
-      String displayText = '$itemName - Qty: ${weight.toStringAsFixed(2)} kg, Value: Php ${totalValue.toStringAsFixed(2)}';
+          String displayText =
+              '$itemName - Qty: ${weight.toStringAsFixed(2)} kg, Value: Php ${totalValue.toStringAsFixed(2)}';
 
-      return Text(
-        displayText,
-        style: TextStyle(fontSize: 16),
-      );
-    }).toList(),
+          return Padding(
+            padding: const EdgeInsets.symmetric(vertical: 4.0),
+            child: Text(
+              displayText,
+              style: TextStyle(fontSize: 16),
+            ),
+          );
+        }).toList(),
+      ),
+    ),
   );
 }
+
 
   void _onButtonPressed() {
     Navigator.push(
