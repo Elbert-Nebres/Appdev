@@ -287,7 +287,7 @@ Widget _buildCartItemsList() {
           double totalValue = pricePerUnit * weight;
 
           String displayText =
-              '$itemName - Qty: ${weight.toStringAsFixed(2)} kg, Value: Php ${totalValue.toStringAsFixed(2)}';
+              '$itemName - Qty: ${weight.toStringAsFixed(2)}, Value: Php ${totalValue.toStringAsFixed(2)}';
 
           return Padding(
             padding: const EdgeInsets.symmetric(vertical: 4.0),
