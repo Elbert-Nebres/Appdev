@@ -34,7 +34,7 @@ class VegetableShop extends StatelessWidget {
           addWeightToTotal: addWeightToTotal,
         ),
         VegetableCard(
-          title: 'Repolyo Silly',
+          title: 'Siling labYouPo',
           pricePerKg: 30.0,
           image: 'assets/silly.png',
           addWeightToTotal: addWeightToTotal,
@@ -81,12 +81,7 @@ class VegetableShop extends StatelessWidget {
           image: 'assets/cauli_flower.png',
           addWeightToTotal: addWeightToTotal,
         ),
-        VegetableCard(
-          title: 'Corn',
-          pricePerKg: 10.0,
-          image: 'assets/corn.png',
-          addWeightToTotal: addWeightToTotal,
-        ),
+       
         VegetableCard(
           title: 'Green Onion',
           pricePerKg: 8.0,

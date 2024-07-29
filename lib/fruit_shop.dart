@@ -94,7 +94,7 @@ class FruitShop extends StatelessWidget {
           addWeightToTotal: addWeightToTotal,
         ),
         FruitCard(
-          title: 'Orinj',
+          title: 'Orange',
           pricePerKg: 30.0,
           image: 'assets/orinj.png',
           addWeightToTotal: addWeightToTotal,
